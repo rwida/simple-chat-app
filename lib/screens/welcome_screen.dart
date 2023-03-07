@@ -22,10 +22,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             Column(
               children: [
-                Container(
-                  height: 180,
-                  child: Image.asset('images/logo.png'),
-                ),
                 const Text(
                   'MessageMe',
                   style: TextStyle(
