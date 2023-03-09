@@ -21,8 +21,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Column(
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'MessageMe',
                   style: TextStyle(
                     fontSize: 40,

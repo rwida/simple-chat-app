@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,9 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              _auth.signOut();
-              Navigator.pop(context);
+              _auth.signOut().then((value) {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const WelcomeScreen()), (route) => false);
+              });
             },
             icon: const Icon(Icons.close),
           )
@@ -106,6 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection("messages").add({
                         "text": messageTxt,
                         "sender": loginUser.email,
+                        "uid": loginUser.uid,
                         "time": FieldValue.serverTimestamp(),
                       });
                     },
@@ -149,14 +152,14 @@ class MessageStream extends StatelessWidget {
           final messageSender = message.get("sender");
           final currentUser = loginUser.email;
 
-          if (currentUser == messageSender) {}
-
-          final messageWidget = MessageLine(
-            sender: messageSender,
-            messageTxt: messageText,
-            isMe: currentUser == messageSender,
-          );
-          messageWidgets.add(messageWidget);
+          if (currentUser == messageSender) {
+            final messageWidget = MessageLine(
+              sender: messageSender,
+              messageTxt: messageText,
+              isMe: currentUser == messageSender,
+            );
+            messageWidgets.add(messageWidget);
+          }
         }
 
         return Expanded(
@@ -190,10 +193,10 @@ class MessageLine extends StatelessWidget {
       child: Column(
         crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(
+          /*  Text(
             sender,
             style: TextStyle(fontSize: 12, color: Colors.yellow[900]),
-          ),
+          ), */
           Material(
             elevation: 5,
             borderRadius: isMe
